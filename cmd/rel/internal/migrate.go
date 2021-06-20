@@ -11,6 +11,7 @@ import (
 	"os/exec"
 	"text/template"
 
+	slUtils "github.com/kallaurru/utils"
 	"github.com/serenize/snaker"
 )
 
@@ -108,7 +109,11 @@ func ExecMigrate(ctx context.Context, args []string) error {
 		verbose                       = fs.Bool("verbose", false, "Show logs from REL")
 		tmpl                          = template.Must(template.New("migration").Parse(migrationTemplate))
 	)
-
+	// попробуем заполнить переменную dir из своего файла env
+	migrationPath, err := GetMigrationProjectDir(slUtils.GetExecFilePath())
+	if err == nil {
+		*dir = migrationPath
+	}
 	fs.Parse(args[2:])
 
 	if *adapter == "" || *driver == "" || *dsn == "" {
