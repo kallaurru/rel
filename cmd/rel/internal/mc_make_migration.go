@@ -47,7 +47,7 @@ func ExecMakeMigration(args []string) error {
 		return MsgWithUserText("name migration longer at 128 symbols")
 	}
 	prefix := makeMigrationPrefixName()
-	suffix := os.Args[2]
+	suffix := args[2]
 	root, err := filepath.Abs(filepath.Dir(args[0]))
 	if err != nil {
 		return err
@@ -96,7 +96,7 @@ func makeMigrationFileName(filename, root string) string {
 		return ""
 	}
 	return filepath.Join(
-		"/tmp",
+		root,
 		migrDir,
 		filename)
 }
