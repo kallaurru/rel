@@ -25,22 +25,13 @@ const (
 // GetMigrationProjectDir - возвращаем относительный путь от корня проекта
 // Например: migrations/ydict
 // @param path - путь до проекта для проверки корректности вложенных каталогов
-func GetMigrationProjectDir(root string) (string, error) {
-	if root == "" {
-		return "", MsgWithUserText("project root dir is not correct")
-	}
+func GetMigrationProjectDir() (string, error) {
 	projectAlias := os.Getenv(ProjectAliasKey)
 	if projectAlias == "" {
 		msg := fmt.Sprintf("project alias env var with key %s has not value", ProjectAliasKey)
 		return "", MsgWithUserText(msg)
 	}
-	migrationPath := filepath.Join(root, RootMigrationPath, projectAlias)
-	if slUtils.IsValidDir(migrationPath) {
-		// возвращаем в формате значения по умолчанию db/migrations
-		return filepath.Join(RootMigrationPath, projectAlias), nil
-	}
-	msg := fmt.Sprintf("target migration root: %s is not valid", migrationPath)
-	return "", MsgWithUserText(msg)
+	return filepath.Join(RootMigrationPath, projectAlias), nil
 }
 
 // ValidateRootEnvFile  - работает в контексте каталога проекта

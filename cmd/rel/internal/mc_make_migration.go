@@ -3,9 +3,9 @@ package internal
 import (
 	"fmt"
 	"github.com/iancoleman/strcase"
+	slUtils "github.com/kallaurru/utils"
 	"os"
 	"path/filepath"
-	"strings"
 	"text/template"
 	"time"
 )
@@ -52,10 +52,6 @@ func ExecMakeMigration(args []string) error {
 	if err != nil {
 		return err
 	}
-	parts := strings.Split(suffix, "_")
-	if len(parts) < 2 {
-		return MsgWithUserText("migration name not camel_case written")
-	}
 	filename := fmt.Sprintf("%s_%s.go", prefix, suffix)
 	fullFileName := makeMigrationFileName(filename, root)
 	if fullFileName == "" {
@@ -91,13 +87,17 @@ func makeMigrationPrefixName() string {
 }
 
 func makeMigrationFileName(filename, root string) string {
-	migrDir, err := GetMigrationProjectDir(root)
+	migrationDir, err := GetMigrationProjectDir()
 	if err != nil {
+		return ""
+	}
+	fullPath := filepath.Join(root, migrationDir)
+	if !slUtils.IsValidDir(fullPath) {
 		return ""
 	}
 	return filepath.Join(
 		root,
-		migrDir,
+		migrationDir,
 		filename)
 }
 

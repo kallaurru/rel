@@ -11,7 +11,6 @@ import (
 	"os/exec"
 	"text/template"
 
-	slUtils "github.com/kallaurru/utils"
 	"github.com/serenize/snaker"
 )
 
@@ -110,7 +109,7 @@ func ExecMigrate(ctx context.Context, args []string) error {
 		tmpl                          = template.Must(template.New("migration").Parse(migrationTemplate))
 	)
 	// попробуем заполнить переменную dir из своего файла env
-	migrationPath, err := GetMigrationProjectDir(slUtils.GetExecFilePath())
+	migrationPath, err := GetMigrationProjectDir()
 	if err == nil {
 		*dir = migrationPath
 	}
