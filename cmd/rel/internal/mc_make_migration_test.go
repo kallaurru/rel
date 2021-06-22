@@ -10,16 +10,17 @@ import (
 
 func TestExecMakeMigration(t *testing.T) {
 	t.Run("make migrate from template", func(t *testing.T) {
+		tmpRoot := t.TempDir()
 		var (
 			projectAlias      = "ydict"
 			tablenameWithVerb = "create_ru_words"
 			args              = []string{
-				filepath.Join(os.TempDir(), "rel"),
+				filepath.Join(tmpRoot, "rel"),
 				"make",
 				tablenameWithVerb,
 			}
 		)
-		err := makeTestDirs(t, projectAlias)
+		err := makeTestDirs(tmpRoot, projectAlias)
 		if err != nil {
 			t.Error(err)
 		}
@@ -27,7 +28,7 @@ func TestExecMakeMigration(t *testing.T) {
 		assert.Equal(t, nil, ExecMakeMigration(args))
 		// проверка существования физического файла миграции
 		targetPath := filepath.Join(
-			os.TempDir(),
+			tmpRoot,
 			RootMigrationPath,
 			projectAlias)
 		err = slUtils.FindFilesWithSuffixInPath(targetPath, "go")
@@ -38,8 +39,8 @@ func TestExecMakeMigration(t *testing.T) {
 	})
 }
 
-func makeTestDirs(t *testing.T, projectPath string) error {
-	path := filepath.Join(t.TempDir(), RootMigrationPath, projectPath)
+func makeTestDirs(rootPath, projectPath string) error {
+	path := filepath.Join(rootPath, RootMigrationPath, projectPath)
 
 	return os.MkdirAll(path, 0755)
 }

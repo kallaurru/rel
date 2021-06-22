@@ -28,7 +28,7 @@ import (
 	"github.com/go-rel/rel"
 	"github.com/go-rel/rel/migrator"
 
-	"{{.Package}}"
+	mcMigrations "{{.Package}}"
 )
 
 var (
@@ -80,7 +80,7 @@ func main() {
 	m.Instrumentation(logger)
 
 	{{range .Migrations}}
-	m.Register({{.Version}}, migrations.Migrate{{.Name}}, migrations.Rollback{{.Name}})
+	m.Register({{.Version}}, mcMigrations.Migrate{{.Name}}, mcMigrations.Rollback{{.Name}})
 	{{end}}
 
 	{{.Command}}
@@ -117,6 +117,8 @@ func ExecMigrate(ctx context.Context, args []string) error {
 
 	if *adapter == "" || *driver == "" || *dsn == "" {
 		return fmt.Errorf("rel: missing required parameters:\n\tadapter: %s\n\tdriver: %s\n\tdsn: %s", *adapter, *driver, *dsn)
+	} else {
+		fmt.Printf("Connection parameters:\n\tadapter: %s\n\tdriver: %s\n\tdsn: %s", *adapter, *driver, *dsn)
 	}
 
 	file, err := ioutil.TempFile(tempdir, "rel-*.go")

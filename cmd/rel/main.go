@@ -28,11 +28,13 @@ func main() {
 	)
 
 	log.SetFlags(0)
+	fmt.Printf("run programm: %s\n", os.Args[0])
 	path := internal.ValidateRootEnvFile(os.Args[0])
 	if path == "" {
 		fmt.Println(internal.MsgBadRootEnvFile())
 		os.Exit(1)
 	}
+
 	err = gotenv.Load(path)
 	if err != nil {
 		fmt.Printf("Env file = %s not uploaded", path)

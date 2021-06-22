@@ -27,14 +27,14 @@ const tablename = "define your table name"
 
 // {{.MigrateFuncName}} definition
 func {{.MigrateFuncName}}(schema *rel.Schema) {
-    schema.CreateTable(tablename, func(t *rel.Table) {
+    schema.CreateTableIfNotExists(tablename, func(t *rel.Table) {
     
 	})
 }
 
 // {{.RollbackFuncName}} definition
 func {{.RollbackFuncName}}(schema *rel.Schema) {
-    schema.DropTable(tablename)
+    schema.DropTableIfExists(tablename)
 }
 
 `
@@ -79,7 +79,7 @@ func makeMigrationPrefixName() string {
 	momentDay := t.Second() + 60*t.Minute() + 3600*t.Hour()
 
 	return fmt.Sprintf(
-		"%d%0d%d%d_",
+		"%d%02d%d%d",
 		year,
 		month,
 		day,

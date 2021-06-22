@@ -36,6 +36,7 @@ func GetMigrationProjectDir() (string, error) {
 
 // ValidateRootEnvFile  - работает в контексте каталога проекта
 func ValidateRootEnvFile(path string) string {
+	path = filepath.Dir(path)
 	// приходит только имя файла
 	value := os.Getenv(RootEnvFileKey)
 	if value != "" {
@@ -43,7 +44,7 @@ func ValidateRootEnvFile(path string) string {
 			filepath.Join(path, value),
 			1024*64)
 		if isValid {
-			return value
+			return filepath.Join(path, value)
 		}
 	}
 
